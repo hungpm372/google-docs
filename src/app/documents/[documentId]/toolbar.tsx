@@ -12,6 +12,7 @@ import { type Level } from '@tiptap/extension-heading'
 import {
   BoldIcon,
   ChevronDownIcon,
+  HighlighterIcon,
   ItalicIcon,
   ListTodoIcon,
   LucideIcon,
@@ -25,6 +26,29 @@ import {
 } from 'lucide-react'
 import { FC } from 'react'
 import { type ColorResult, SketchPicker } from 'react-color'
+
+const HighlightColorButton = () => {
+  const { editor } = useEditorStore()
+
+  const currentColor = editor?.getAttributes('highlight').color || '#ffffff'
+
+  const handleColorChange = (color: ColorResult) => {
+    editor?.chain().focus().setHighlight({ color: color.hex }).run()
+  }
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button className='h-7 min-w-7 shrink-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm'>
+          <HighlighterIcon className='size-4' />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className='p-0'>
+        <SketchPicker color={currentColor} onChange={handleColorChange} />
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
 
 const TextColorButton = () => {
   const { editor } = useEditorStore()
@@ -485,6 +509,7 @@ export const Toolbar: FC = () => {
         <ToolbarButton key={item.label} {...item} />
       ))}
       <TextColorButton />
+      <HighlightColorButton />
       <Separator orientation='vertical' className='h-6 bg-neutral-300' />
       {sections[2].map((item) => (
         <ToolbarButton key={item.label} {...item} />
