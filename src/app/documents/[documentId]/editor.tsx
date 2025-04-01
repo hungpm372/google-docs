@@ -1,5 +1,6 @@
 'use client'
 
+import { useEditorStore } from '@/store/use-editor-store'
 import Image from '@tiptap/extension-image'
 import Table from '@tiptap/extension-table'
 import TableCell from '@tiptap/extension-table-cell'
@@ -13,7 +14,32 @@ import { FC } from 'react'
 import ImageResize from 'tiptap-extension-resize-image'
 
 export const Editor: FC = () => {
+  const { setEditor } = useEditorStore()
   const editor = useEditor({
+    onCreate(props) {
+      setEditor(props.editor)
+    },
+    onDestroy() {
+      setEditor(null)
+    },
+    onUpdate(props) {
+      setEditor(props.editor)
+    },
+    onSelectionUpdate(props) {
+      setEditor(props.editor)
+    },
+    onTransaction(props) {
+      setEditor(props.editor)
+    },
+    onFocus(props) {
+      setEditor(props.editor)
+    },
+    onBlur(props) {
+      setEditor(props.editor)
+    },
+    onContentError(props) {
+      setEditor(props.editor)
+    },
     editorProps: {
       attributes: {
         style: 'padding-left: 56px; padding-right: 56px;',
@@ -21,6 +47,7 @@ export const Editor: FC = () => {
           'focus:outline-none print:border-0 bg-white border border-[#c7c7c7] flex flex-col min-h-[1054px] w-[816px] pt-10 pr-14 pb-10 cursor-text'
       }
     },
+    immediatelyRender: false,
     extensions: [
       StarterKit,
       Image,
