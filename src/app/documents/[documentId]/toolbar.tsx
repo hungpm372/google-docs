@@ -1,27 +1,269 @@
 'use client'
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu'
 import { Separator } from '@/components/ui/separator'
 import { cn } from '@/lib/utils'
 import { useEditorStore } from '@/store/use-editor-store'
 import {
-    BoldIcon,
-    ItalicIcon,
-    ListTodoIcon,
-    LucideIcon,
-    MessageSquarePlusIcon,
-    PrinterIcon,
-    Redo2Icon,
-    RemoveFormattingIcon,
-    SpellCheckIcon,
-    UnderlineIcon,
-    Undo2Icon
+  BoldIcon,
+  ChevronDownIcon,
+  ItalicIcon,
+  ListTodoIcon,
+  LucideIcon,
+  MessageSquarePlusIcon,
+  PrinterIcon,
+  Redo2Icon,
+  RemoveFormattingIcon,
+  SpellCheckIcon,
+  UnderlineIcon,
+  Undo2Icon
 } from 'lucide-react'
 import { FC } from 'react'
 
+const FontFamilyButton = () => {
+  const { editor } = useEditorStore()
+  const fonts = [
+    {
+      label: 'Arial',
+      value: 'Arial'
+    },
+    {
+      label: 'Helvetica',
+      value: 'Helvetica, sans-serif'
+    },
+    {
+      label: 'Times New Roman',
+      value: 'Times New Roman, serif'
+    },
+    {
+      label: 'Courier New',
+      value: 'Courier New, monospace'
+    },
+    {
+      label: 'Georgia',
+      value: 'Georgia, serif'
+    },
+    {
+      label: 'Verdana',
+      value: 'Verdana, sans-serif'
+    },
+    {
+      label: 'Tahoma',
+      value: 'Tahoma, sans-serif'
+    },
+    {
+      label: 'Trebuchet MS',
+      value: 'Trebuchet MS, sans-serif'
+    },
+    {
+      label: 'Impact',
+      value: 'Impact, sans-serif'
+    },
+    {
+      label: 'Comic Sans MS',
+      value: 'Comic Sans MS, cursive'
+    },
+    {
+      label: 'Palatino',
+      value: 'Palatino, serif'
+    },
+    {
+      label: 'Garamond',
+      value: 'Garamond, serif'
+    },
+    {
+      label: 'Bookman',
+      value: 'Bookman, serif'
+    },
+    {
+      label: 'Avant Garde',
+      value: 'Avant Garde, sans-serif'
+    },
+    {
+      label: 'Lucida Grande',
+      value: 'Lucida Grande, sans-serif'
+    },
+    {
+      label: 'Roboto',
+      value: '"Roboto", sans-serif'
+    },
+    {
+      label: 'Open Sans',
+      value: '"Open Sans", sans-serif'
+    },
+    {
+      label: 'Lato',
+      value: '"Lato", sans-serif'
+    },
+    {
+      label: 'Montserrat',
+      value: '"Montserrat", sans-serif'
+    },
+    {
+      label: 'Raleway',
+      value: '"Raleway", sans-serif'
+    },
+    {
+      label: 'Oswald',
+      value: '"Oswald", sans-serif'
+    },
+    {
+      label: 'Merriweather',
+      value: '"Merriweather", serif'
+    },
+    {
+      label: 'Poppins',
+      value: '"Poppins", sans-serif'
+    },
+    {
+      label: 'Source Sans Pro',
+      value: '"Source Sans Pro", sans-serif'
+    },
+    {
+      label: 'Ubuntu',
+      value: '"Ubuntu", sans-serif'
+    },
+    {
+      label: 'Playfair Display',
+      value: '"Playfair Display", serif'
+    },
+    {
+      label: 'Nunito',
+      value: '"Nunito", sans-serif'
+    },
+    {
+      label: 'Quicksand',
+      value: '"Quicksand", sans-serif'
+    },
+    {
+      label: 'PT Sans',
+      value: '"PT Sans", sans-serif'
+    },
+    {
+      label: 'PT Serif',
+      value: '"PT Serif", serif'
+    },
+    {
+      label: 'Rubik',
+      value: '"Rubik", sans-serif'
+    },
+    {
+      label: 'Work Sans',
+      value: '"Work Sans", sans-serif'
+    },
+    {
+      label: 'Fira Sans',
+      value: '"Fira Sans", sans-serif'
+    },
+    {
+      label: 'Noto Sans',
+      value: '"Noto Sans", sans-serif'
+    },
+    {
+      label: 'Noto Serif',
+      value: '"Noto Serif", serif'
+    },
+    {
+      label: 'Crimson Text',
+      value: '"Crimson Text", serif'
+    },
+    {
+      label: 'Mukta',
+      value: '"Mukta", sans-serif'
+    },
+    {
+      label: 'IBM Plex Sans',
+      value: '"IBM Plex Sans", sans-serif'
+    },
+    {
+      label: 'IBM Plex Serif',
+      value: '"IBM Plex Serif", serif'
+    },
+    {
+      label: 'IBM Plex Mono',
+      value: '"IBM Plex Mono", monospace'
+    },
+    {
+      label: 'Dancing Script',
+      value: '"Dancing Script", cursive'
+    },
+    {
+      label: 'Pacifico',
+      value: '"Pacifico", cursive'
+    },
+    {
+      label: 'Shadows Into Light',
+      value: '"Shadows Into Light", cursive'
+    },
+    {
+      label: 'Lobster',
+      value: '"Lobster", cursive'
+    },
+    {
+      label: 'Inconsolata',
+      value: '"Inconsolata", monospace'
+    },
+    {
+      label: 'Source Code Pro',
+      value: '"Source Code Pro", monospace'
+    },
+    {
+      label: 'Fira Code',
+      value: '"Fira Code", monospace'
+    },
+    {
+      label: 'JetBrains Mono',
+      value: '"JetBrains Mono", monospace'
+    },
+    {
+      label: 'Arimo',
+      value: '"Arimo", sans-serif'
+    }
+  ]
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button
+          className={cn(
+            'h-7 w-[120px] shrink-0 flex items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm'
+          )}
+        >
+          <span className='truncate'>
+            {editor?.getAttributes('textStyle').fontFamily || 'Arial'}
+          </span>
+          <ChevronDownIcon className='ml-2 size-4 shrink-0' />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className='p-1 flex flex-col gap-y-1'>
+        {fonts.map(({ label, value }) => (
+          <button
+            key={value}
+            onClick={() => editor?.chain().focus().setFontFamily(value).run()}
+            type='button'
+            aria-label={label}
+            className={cn(
+              'flex items-center gap-x-2 px-2 py-1 rounded-sm hover:bg-neutral-200/80',
+              editor?.getAttributes('textStyle').fontFamily === value && 'bg-neutral-200/80'
+            )}
+            style={{ fontFamily: value }}
+          >
+            <span className='text-sm'>{label}</span>
+          </button>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
+
 interface ToolbarButtonProps {
-  onClick?: () => void
-  isActive?: boolean
   icon: LucideIcon
+  isActive?: boolean
+  onClick?: () => void
 }
 
 const ToolbarButton: FC<ToolbarButtonProps> = ({ onClick, isActive, icon: Icon }) => {
@@ -119,6 +361,8 @@ export const Toolbar: FC = () => {
       {sections[0].map((item) => (
         <ToolbarButton key={item.label} {...item} />
       ))}
+      <Separator orientation='vertical' className='h-6 bg-neutral-300' />
+      <FontFamilyButton />
       <Separator orientation='vertical' className='h-6 bg-neutral-300' />
       {sections[1].map((item) => (
         <ToolbarButton key={item.label} {...item} />
