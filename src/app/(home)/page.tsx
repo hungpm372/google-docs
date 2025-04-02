@@ -1,5 +1,5 @@
-import Link from 'next/link'
 import { Navbar } from './navbar'
+import { TemplateGallery } from './template-gallery'
 
 export default function Home() {
   return (
@@ -8,12 +8,7 @@ export default function Home() {
         <Navbar />
       </div>
       <div className='mt-16'>
-        <Link
-          href='/documents/1'
-          className='rounded-md bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 inline-block'
-        >
-          Go to Document Editor
-        </Link>
+        <TemplateGallery />
       </div>
     </div>
   )
