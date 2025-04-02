@@ -107,12 +107,12 @@ export const Ruler: FC = () => {
       //   onMouseMove={handleMouseMove}
       //   onMouseUp={handleMouseUp}
       //   onMouseLeave={handleMouseUp}
-      className='h-6 border-b border-gray-300 flex items-end relative select-none print:hidden'
+      className='w-[816px] mx-auto h-6 border-b border-gray-300 flex items-end relative select-none print:hidden'
     >
       <div
         id='ruler-container'
         className={cn(
-          'max-w-[816px] mx-auto size-full relative',
+          'size-full relative',
           (isDraggingLeft || isDraggingRight) && 'cursor-ew-resize'
         )}
       >
