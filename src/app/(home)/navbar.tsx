@@ -1,3 +1,4 @@
+import { UserButton } from '@clerk/nextjs'
 import Image from 'next/image'
 import Link from 'next/link'
 import { FC, Suspense } from 'react'
@@ -15,6 +16,7 @@ export const Navbar: FC = () => {
       <Suspense>
         <SearchInput />
       </Suspense>
+      <UserButton />
     </nav>
   )
 }
