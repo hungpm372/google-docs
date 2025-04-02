@@ -2,8 +2,16 @@
 
 import { Button } from '@/components/ui/button'
 import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle
+} from '@/components/ui/dialog'
+import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
@@ -15,6 +23,7 @@ import {
   BoldIcon,
   ChevronDownIcon,
   HighlighterIcon,
+  ImageIcon,
   ItalicIcon,
   Link2Icon,
   ListTodoIcon,
@@ -23,12 +32,89 @@ import {
   PrinterIcon,
   Redo2Icon,
   RemoveFormattingIcon,
+  SearchIcon,
   SpellCheckIcon,
   UnderlineIcon,
-  Undo2Icon
+  Undo2Icon,
+  UploadIcon
 } from 'lucide-react'
-import { FC, useState } from 'react'
+import React, { FC, useState } from 'react'
 import { type ColorResult, SketchPicker } from 'react-color'
+
+const ImageButton = () => {
+  const { editor } = useEditorStore()
+  const [imageUrl, setImageUrl] = useState<string>('')
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+
+  const handleChange = (src: string) => {
+    editor?.chain().focus().setImage({ src }).run()
+  }
+
+  const handleUpload = () => {
+    const input = document.createElement('input')
+    input.type = 'file'
+    input.accept = 'image/*'
+    input.onchange = async (event) => {
+      const file = (event.target as HTMLInputElement).files?.[0]
+      if (file) {
+        const imageUrl = URL.createObjectURL(file)
+        handleChange(imageUrl)
+      }
+    }
+    input.click()
+  }
+
+  const handleImageUrlSubmit = () => {
+    if (imageUrl) {
+      handleChange(imageUrl)
+      setImageUrl('')
+      setIsOpen(false)
+    }
+  }
+
+  return (
+    <React.Fragment>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <button className='h-7 min-w-7 shrink-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm'>
+            <ImageIcon className='size-4' />
+          </button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem onClick={handleUpload}>
+            <UploadIcon className='size-4 mr-2' />
+            Upload
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setIsOpen(true)}>
+            <SearchIcon className='size-4 mr-2' />
+            Paste image URL
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Insert image URL</DialogTitle>
+          </DialogHeader>
+          <Input
+            placeholder='Insert image URL'
+            value={imageUrl}
+            onChange={(e) => setImageUrl(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                handleImageUrlSubmit()
+              }
+            }}
+          />
+          <DialogFooter>
+            <Button onClick={handleImageUrlSubmit}>Insert</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </React.Fragment>
+  )
+}
 
 const LinkButton = () => {
   const { editor } = useEditorStore()
@@ -549,6 +635,7 @@ export const Toolbar: FC = () => {
       <HighlightColorButton />
       <Separator orientation='vertical' className='h-6 bg-neutral-300' />
       <LinkButton />
+      <ImageButton />
       <Separator orientation='vertical' className='h-6 bg-neutral-300' />
       {sections[2].map((item) => (
         <ToolbarButton key={item.label} {...item} />
