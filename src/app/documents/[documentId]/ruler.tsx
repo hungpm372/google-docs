@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils'
-import React, { FC, MouseEvent, useRef, useState } from 'react'
+import React, { FC, useEffect, useRef, useState } from 'react'
 import { FaCaretDown } from 'react-icons/fa'
 
 const markers = Array.from({ length: 83 }, (_, i) => i)
@@ -19,35 +19,35 @@ export const Ruler: FC = () => {
     setIsDraggingRight(true)
   }
 
-  const handleMouseMove = (e: MouseEvent) => {
-    const PAGE_WIDTH = 816
-    const MINIMUN_SPACE = 100
+  //   const handleMouseMove = (e: MouseEvent) => {
+  //     const PAGE_WIDTH = 816
+  //     const MINIMUN_SPACE = 100
 
-    if ((isDraggingLeft || isDraggingRight) && rulerRef.current) {
-      const container = rulerRef.current.querySelector('#ruler-container')
-      if (!container) return
+  //     if ((isDraggingLeft || isDraggingRight) && rulerRef.current) {
+  //       const container = rulerRef.current.querySelector('#ruler-container')
+  //       if (!container) return
 
-      const containerRect = container.getBoundingClientRect()
-      const relativeX = e.clientX - containerRect.left
-      const rawPosition = Math.max(0, Math.min(PAGE_WIDTH, relativeX))
+  //       const containerRect = container.getBoundingClientRect()
+  //       const relativeX = e.clientX - containerRect.left
+  //       const rawPosition = Math.max(0, Math.min(PAGE_WIDTH, relativeX))
 
-      if (isDraggingLeft) {
-        const maxLeftPosition = PAGE_WIDTH - rightMargin - MINIMUN_SPACE
-        const newLeftPosition = Math.min(rawPosition, maxLeftPosition)
-        setLeftMargin(newLeftPosition)
-      } else if (isDraggingRight) {
-        const maxRightPosition = PAGE_WIDTH - leftMargin - MINIMUN_SPACE
-        const newRightPosition = Math.max(PAGE_WIDTH - rawPosition, 0)
-        const constrainedRightPosition = Math.min(newRightPosition, maxRightPosition)
-        setRightMargin(constrainedRightPosition)
-      }
-    }
-  }
+  //       if (isDraggingLeft) {
+  //         const maxLeftPosition = PAGE_WIDTH - rightMargin - MINIMUN_SPACE
+  //         const newLeftPosition = Math.min(rawPosition, maxLeftPosition)
+  //         setLeftMargin(newLeftPosition)
+  //       } else if (isDraggingRight) {
+  //         const maxRightPosition = PAGE_WIDTH - leftMargin - MINIMUN_SPACE
+  //         const newRightPosition = Math.max(PAGE_WIDTH - rawPosition, 0)
+  //         const constrainedRightPosition = Math.min(newRightPosition, maxRightPosition)
+  //         setRightMargin(constrainedRightPosition)
+  //       }
+  //     }
+  //   }
 
-  const handleMouseUp = () => {
-    setIsDraggingLeft(false)
-    setIsDraggingRight(false)
-  }
+  //   const handleMouseUp = () => {
+  //     setIsDraggingLeft(false)
+  //     setIsDraggingRight(false)
+  //   }
 
   const handleLeftDoubleClick = () => {
     setLeftMargin(56)
@@ -57,12 +57,56 @@ export const Ruler: FC = () => {
     setRightMargin(56)
   }
 
+  useEffect(() => {
+    // Add global mouse move and up event listeners when dragging outside the ruler
+    const handleGlobalMouseMove = (e: globalThis.MouseEvent) => {
+      if (isDraggingLeft || isDraggingRight) {
+        const container = rulerRef.current?.querySelector('#ruler-container')
+        if (!container) return
+
+        const containerRect = (container as Element).getBoundingClientRect()
+        const relativeX = e.clientX - containerRect.left
+        const PAGE_WIDTH = 816
+        const MINIMUN_SPACE = 100
+        const rawPosition = Math.max(0, Math.min(PAGE_WIDTH, relativeX))
+
+        if (isDraggingLeft) {
+          const maxLeftPosition = PAGE_WIDTH - rightMargin - MINIMUN_SPACE
+          const newLeftPosition = Math.min(rawPosition, maxLeftPosition)
+          setLeftMargin(newLeftPosition)
+        } else if (isDraggingRight) {
+          const maxRightPosition = PAGE_WIDTH - leftMargin - MINIMUN_SPACE
+          const newRightPosition = Math.max(PAGE_WIDTH - rawPosition, 0)
+          const constrainedRightPosition = Math.min(newRightPosition, maxRightPosition)
+          setRightMargin(constrainedRightPosition)
+        }
+      }
+    }
+
+    const handleGlobalMouseUp = () => {
+      if (isDraggingLeft || isDraggingRight) {
+        setIsDraggingLeft(false)
+        setIsDraggingRight(false)
+      }
+    }
+
+    if (isDraggingLeft || isDraggingRight) {
+      document.addEventListener('mousemove', handleGlobalMouseMove)
+      document.addEventListener('mouseup', handleGlobalMouseUp)
+    }
+
+    return () => {
+      document.removeEventListener('mousemove', handleGlobalMouseMove)
+      document.removeEventListener('mouseup', handleGlobalMouseUp)
+    }
+  }, [isDraggingLeft, isDraggingRight, leftMargin, rightMargin])
+
   return (
     <div
       ref={rulerRef}
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
-      onMouseLeave={handleMouseUp}
+      //   onMouseMove={handleMouseMove}
+      //   onMouseUp={handleMouseUp}
+      //   onMouseLeave={handleMouseUp}
       className='h-6 border-b border-gray-300 flex items-end relative select-none print:hidden'
     >
       <div
