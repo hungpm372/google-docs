@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button'
 import {
   Table,
   TableBody,
@@ -18,7 +19,7 @@ interface DocumentsTableProps {
   loadMore: (numItems: number) => void
 }
 
-export const DocumentsTable: FC<DocumentsTableProps> = ({ documents }) => {
+export const DocumentsTable: FC<DocumentsTableProps> = ({ status, documents, loadMore }) => {
   return (
     <div className='max-w-screen-xl mx-auto px-16 py-6 flex flex-col gap-5'>
       {documents === undefined ? (
@@ -48,6 +49,20 @@ export const DocumentsTable: FC<DocumentsTableProps> = ({ documents }) => {
           </TableBody>
         </Table>
       )}
+      <div className='flex items-center justify-center'>
+        {status === 'LoadingFirstPage' || status === 'LoadingMore' ? (
+          <LoaderIcon className='size-6 text-muted-foreground animate-spin' />
+        ) : (
+          <Button
+            variant='ghost'
+            size='sm'
+            onClick={() => loadMore(10)}
+            disabled={status !== 'CanLoadMore'}
+          >
+            {status === 'CanLoadMore' ? 'Load more' : 'End of results'}
+          </Button>
+        )}
+      </div>
     </div>
   )
 }
