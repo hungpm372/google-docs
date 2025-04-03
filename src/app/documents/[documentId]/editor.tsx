@@ -58,6 +58,7 @@ export const Editor: FC = () => {
       }
     },
     immediatelyRender: false,
+    autofocus: true,
     extensions: [
       StarterKit,
       LineHeightExtension.configure({
