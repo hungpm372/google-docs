@@ -25,9 +25,10 @@ import { Ruler } from './ruler'
 
 interface EditorProps {
   onChange: () => void
+  initialContent?: string
 }
 
-export const Editor: FC<EditorProps> = ({ onChange }) => {
+export const Editor: FC<EditorProps> = ({ initialContent, onChange }) => {
   const { setEditor } = useEditorStore()
   const editor = useEditor({
     onCreate(props) {
@@ -65,6 +66,7 @@ export const Editor: FC<EditorProps> = ({ onChange }) => {
     },
     immediatelyRender: false,
     autofocus: true,
+    content: initialContent,
     extensions: [
       StarterKit,
       LineHeightExtension.configure({

@@ -2,23 +2,28 @@
 
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable'
 import { useEditorStore } from '@/store/use-editor-store'
+import { useQuery } from 'convex/react'
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
 import { Loader } from 'lucide-react'
 import dynamic from 'next/dynamic'
+import { useParams } from 'next/navigation'
 import { FC, useEffect, useState } from 'react'
 import { useDebounceCallback } from 'usehooks-ts'
+import { api } from '../../../../convex/_generated/api'
+import { Id } from '../../../../convex/_generated/dataModel'
 import { Editor } from './editor'
 import { Navbar } from './navbar'
 import { Toolbar } from './toolbar'
 
 const PdfViewer = dynamic(() => import('./pdf-viewer'), { ssr: false })
 
-interface DocumentIdPageProps {
-  params: Promise<{ documentId: string }>
-}
+const DocumentIdPage: FC = () => {
+  const params = useParams<{ documentId: string }>()
+  const documentResult = useQuery(api.documents.getById, {
+    id: params.documentId as Id<'documents'>
+  })
 
-const DocumentIdPage: FC<DocumentIdPageProps> = () => {
   const { editor } = useEditorStore()
   const [compiledPdf, setCompiledPdf] = useState<string | null>(null)
 
@@ -67,6 +72,13 @@ const DocumentIdPage: FC<DocumentIdPageProps> = () => {
     }
   }, [compiledPdf])
 
+  useEffect(() => {
+    debouncedHandleChange()
+    return () => {
+      debouncedHandleChange.cancel()
+    }
+  }, [debouncedHandleChange, documentResult])
+
   return (
     <div className='flex flex-col h-screen'>
       <div className='flex flex-col px-4 pt-2 gap-y-2 bg-[#fafbfd] print:hidden'>
@@ -79,7 +91,16 @@ const DocumentIdPage: FC<DocumentIdPageProps> = () => {
           <ResizablePanel className='border-r !overflow-auto'>
             <div className='bg-[#fafbfd] min-w-[900px]'>
               <div className='print:pt-0 h-full'>
-                <Editor onChange={debouncedHandleChange} />
+                {documentResult ? (
+                  <Editor
+                    onChange={debouncedHandleChange}
+                    initialContent={documentResult.initialContent}
+                  />
+                ) : (
+                  <div className='flex items-center justify-center size-full h-[calc(100vh-108px)]'>
+                    <Loader className='animate-spin size-6' />
+                  </div>
+                )}
               </div>
             </div>
           </ResizablePanel>

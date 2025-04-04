@@ -52,7 +52,7 @@ export const TemplateGallery: FC = () => {
                 >
                   <button
                     disabled={isCreating}
-                    onClick={() => handleTemplateClick(template.label, '')}
+                    onClick={() => handleTemplateClick(template.label, template.initialContent)}
                     style={{
                       backgroundImage: `url(${template.imageUrl})`,
                       backgroundSize: 'cover',

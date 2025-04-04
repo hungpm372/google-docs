@@ -90,3 +90,25 @@ export const updateById = mutation({
     })
   }
 })
+
+export const getById = query({
+  args: { id: v.id('documents') },
+  handler: async (ctx, args) => {
+    const user = await ctx.auth.getUserIdentity()
+
+    if (!user) {
+      throw new ConvexError('Unauthenticated user')
+    }
+
+    const document = await ctx.db.get(args.id)
+    if (!document) {
+      throw new ConvexError('Document not found')
+    }
+
+    if (document.ownerId !== user.subject) {
+      throw new ConvexError('Unauthorized to delete this document')
+    }
+
+    return document
+  }
+})
