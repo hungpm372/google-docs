@@ -125,7 +125,7 @@ export const Editor: FC<EditorProps> = ({ initialContent, onChange }) => {
             <EditorContent editor={editor} />
           </div>
         </ContextMenuTrigger>
-        <ContextMenuContent className='w-[300px] py-2'>
+        <ContextMenuContent className='w-[300px] py-2' onContextMenu={(e) => e.preventDefault()}>
           <ContextMenuSub>
             <ContextMenuSubTrigger>
               <PlusIcon className='mr-2 size-4' /> Chèn bảng
