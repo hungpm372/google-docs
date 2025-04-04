@@ -77,7 +77,7 @@ const DocumentIdPage: FC = () => {
     return () => {
       debouncedHandleChange.cancel()
     }
-  }, [debouncedHandleChange, documentResult])
+  }, [documentResult])
 
   return (
     <div className='flex flex-col h-screen'>
