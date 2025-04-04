@@ -2,7 +2,7 @@
 
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable'
 import { useEditorStore } from '@/store/use-editor-store'
-import { useQuery } from 'convex/react'
+import { useMutation, useQuery } from 'convex/react'
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
 import { Loader } from 'lucide-react'
@@ -20,15 +20,25 @@ const PdfViewer = dynamic(() => import('./pdf-viewer'), { ssr: false })
 
 const DocumentIdPage: FC = () => {
   const params = useParams<{ documentId: string }>()
+  const update = useMutation(api.documents.updateById)
   const documentResult = useQuery(api.documents.getById, {
     id: params.documentId as Id<'documents'>
   })
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const { editor } = useEditorStore()
   const [compiledPdf, setCompiledPdf] = useState<string | null>(null)
 
   const debouncedHandleChange = useDebounceCallback(
     () => {
+      setIsLoading(true)
+      update({
+        id: params.documentId as Id<'documents'>,
+        initialContent: editor?.getHTML()
+      }).finally(() => {
+        setIsLoading(false)
+      })
+
       const element = document.getElementById('tiptap')
       if (!element) return
       const pdf = new jsPDF('p', 'pt', 'a4')
@@ -82,7 +92,7 @@ const DocumentIdPage: FC = () => {
   return (
     <div className='flex flex-col h-screen'>
       <div className='flex flex-col px-4 pt-2 gap-y-2 bg-[#fafbfd] print:hidden'>
-        <Navbar />
+        <Navbar data={documentResult} isLoading={isLoading} />
         <Toolbar />
       </div>
 

@@ -68,7 +68,11 @@ export const removeById = mutation({
 })
 
 export const updateById = mutation({
-  args: { id: v.id('documents'), title: v.string() },
+  args: {
+    id: v.id('documents'),
+    title: v.optional(v.string()),
+    initialContent: v.optional(v.string())
+  },
   handler: async (ctx, args) => {
     const user = await ctx.auth.getUserIdentity()
 
@@ -86,7 +90,8 @@ export const updateById = mutation({
     }
 
     return await ctx.db.patch(args.id, {
-      title: args.title
+      initialContent: args.initialContent ?? document.initialContent,
+      title: args.title ?? document.title
     })
   }
 })

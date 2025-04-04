@@ -36,9 +36,15 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { FC } from 'react'
 import { BsFilePdf } from 'react-icons/bs'
+import { Doc } from '../../../../convex/_generated/dataModel'
 import { DocumentInput } from './document-input'
 
-export const Navbar: FC = () => {
+interface NavbarProps {
+  data: Doc<'documents'> | undefined
+  isLoading: boolean
+}
+
+export const Navbar: FC<NavbarProps> = ({ data, isLoading }) => {
   const { editor } = useEditorStore()
 
   const handleInsertTable = ({ rows, cols }: { rows: number; cols: number }) => {
@@ -93,7 +99,7 @@ export const Navbar: FC = () => {
           />
         </Link>
         <div className='flex flex-col'>
-          <DocumentInput />
+          <DocumentInput data={data} isLoading={isLoading} />
           <div className='flex'>
             <Menubar className='border-none bg-transparent shadow-none h-auto p-0'>
               <MenubarMenu>
