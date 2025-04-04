@@ -13,6 +13,7 @@ import {
   MenubarTrigger
 } from '@/components/ui/menubar'
 import { useEditorStore } from '@/store/use-editor-store'
+import { UserButton } from '@clerk/nextjs'
 import {
   BoldIcon,
   FileIcon,
@@ -68,10 +69,7 @@ export const Navbar: FC = () => {
   }
 
   const handleSavePDF = () => {
-    if (!editor) return
-    const content = editor.getHTML()
-    const blob = new Blob([content], { type: 'application/pdf' })
-    handleDownload(blob, 'document.pdf')
+    window.print()
   }
 
   const handleSaveText = () => {
@@ -228,6 +226,7 @@ export const Navbar: FC = () => {
           </div>
         </div>
       </div>
+      <UserButton />
     </nav>
   )
 }
