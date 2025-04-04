@@ -1,20 +1,20 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle
-} from '@/components/ui/dialog'
+// import { Button } from '@/components/ui/button'
+// import {
+//   Dialog,
+//   DialogContent,
+//   DialogFooter,
+//   DialogHeader,
+//   DialogTitle
+// } from '@/components/ui/dialog'
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
+  // DropdownMenuItem,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
-import { Input } from '@/components/ui/input'
+// import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
 import { cn } from '@/lib/utils'
 import { useEditorStore } from '@/store/use-editor-store'
@@ -26,11 +26,11 @@ import {
   AlignRightIcon,
   BoldIcon,
   ChevronDownIcon,
-  HighlighterIcon,
-  ImageIcon,
+  // HighlighterIcon,
+  // ImageIcon,
   ItalicIcon,
-  Link2Icon,
-  ListCollapseIcon,
+  // Link2Icon,
+  // ListCollapseIcon,
   ListIcon,
   ListOrderedIcon,
   ListTodoIcon,
@@ -38,57 +38,57 @@ import {
   MessageSquarePlusIcon,
   MinusIcon,
   PlusIcon,
-  PrinterIcon,
+  // PrinterIcon,
   Redo2Icon,
   RemoveFormattingIcon,
-  SearchIcon,
-  SpellCheckIcon,
+  // SearchIcon,
+  // SpellCheckIcon,
   UnderlineIcon,
-  Undo2Icon,
-  UploadIcon
+  Undo2Icon
+  // UploadIcon
 } from 'lucide-react'
 import React, { FC, useState } from 'react'
-import { type ColorResult, SketchPicker } from 'react-color'
+// import { type ColorResult, SketchPicker } from 'react-color'
 
-const LineHeightButton = () => {
-  const { editor } = useEditorStore()
+// const LineHeightButton = () => {
+//   const { editor } = useEditorStore()
 
-  const lineHeights = [
-    { label: 'Default', value: 'Normal' },
-    { label: 'Single', value: '1' },
-    { label: '1.15', value: '1.15' },
-    { label: '1.5', value: '1.5' },
-    { label: 'Double', value: '2' },
-    { label: '2.5', value: '2.5' },
-    { label: '3', value: '3' }
-  ]
+//   const lineHeights = [
+//     { label: 'Default', value: 'Normal' },
+//     { label: 'Single', value: '1' },
+//     { label: '1.15', value: '1.15' },
+//     { label: '1.5', value: '1.5' },
+//     { label: 'Double', value: '2' },
+//     { label: '2.5', value: '2.5' },
+//     { label: '3', value: '3' }
+//   ]
 
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <button className='h-7 min-w-7 shrink-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm'>
-          <ListCollapseIcon className='size-4' />
-        </button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className='p-1 flex flex-col gap-y-1'>
-        {lineHeights.map(({ label, value }) => (
-          <button
-            key={value}
-            onClick={() => editor?.chain().focus().setLineHeight(value).run()}
-            type='button'
-            aria-label={label}
-            className={cn(
-              'flex items-center gap-x-2 px-2 py-1 rounded-sm hover:bg-neutral-200/80',
-              editor?.getAttributes('paragraph').lineHeight === value && 'bg-neutral-200/80'
-            )}
-          >
-            <span className='text-sm'>{label}</span>
-          </button>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
-  )
-}
+//   return (
+//     <DropdownMenu>
+//       <DropdownMenuTrigger asChild>
+//         <button className='h-7 min-w-7 shrink-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm'>
+//           <ListCollapseIcon className='size-4' />
+//         </button>
+//       </DropdownMenuTrigger>
+//       <DropdownMenuContent className='p-1 flex flex-col gap-y-1'>
+//         {lineHeights.map(({ label, value }) => (
+//           <button
+//             key={value}
+//             onClick={() => editor?.chain().focus().setLineHeight(value).run()}
+//             type='button'
+//             aria-label={label}
+//             className={cn(
+//               'flex items-center gap-x-2 px-2 py-1 rounded-sm hover:bg-neutral-200/80',
+//               editor?.getAttributes('paragraph').lineHeight === value && 'bg-neutral-200/80'
+//             )}
+//           >
+//             <span className='text-sm'>{label}</span>
+//           </button>
+//         ))}
+//       </DropdownMenuContent>
+//     </DropdownMenu>
+//   )
+// }
 
 const FontSizeButton = () => {
   const { editor } = useEditorStore()
@@ -278,161 +278,161 @@ const AlignButton = () => {
   )
 }
 
-const ImageButton = () => {
-  const { editor } = useEditorStore()
-  const [imageUrl, setImageUrl] = useState<string>('')
-  const [isOpen, setIsOpen] = useState<boolean>(false)
+// const ImageButton = () => {
+//   const { editor } = useEditorStore()
+//   const [imageUrl, setImageUrl] = useState<string>('')
+//   const [isOpen, setIsOpen] = useState<boolean>(false)
 
-  const handleChange = (src: string) => {
-    editor?.chain().focus().setImage({ src }).run()
-  }
+//   const handleChange = (src: string) => {
+//     editor?.chain().focus().setImage({ src }).run()
+//   }
 
-  const handleUpload = () => {
-    const input = document.createElement('input')
-    input.type = 'file'
-    input.accept = 'image/*'
-    input.onchange = async (event) => {
-      const file = (event.target as HTMLInputElement).files?.[0]
-      if (file) {
-        const imageUrl = URL.createObjectURL(file)
-        handleChange(imageUrl)
-      }
-    }
-    input.click()
-  }
+//   const handleUpload = () => {
+//     const input = document.createElement('input')
+//     input.type = 'file'
+//     input.accept = 'image/*'
+//     input.onchange = async (event) => {
+//       const file = (event.target as HTMLInputElement).files?.[0]
+//       if (file) {
+//         const imageUrl = URL.createObjectURL(file)
+//         handleChange(imageUrl)
+//       }
+//     }
+//     input.click()
+//   }
 
-  const handleImageUrlSubmit = () => {
-    if (imageUrl) {
-      handleChange(imageUrl)
-      setImageUrl('')
-      setIsOpen(false)
-    }
-  }
+//   const handleImageUrlSubmit = () => {
+//     if (imageUrl) {
+//       handleChange(imageUrl)
+//       setImageUrl('')
+//       setIsOpen(false)
+//     }
+//   }
 
-  return (
-    <React.Fragment>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <button className='h-7 min-w-7 shrink-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm'>
-            <ImageIcon className='size-4' />
-          </button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <DropdownMenuItem onClick={handleUpload}>
-            <UploadIcon className='size-4 mr-2' />
-            Upload
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setIsOpen(true)}>
-            <SearchIcon className='size-4 mr-2' />
-            Paste image URL
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+//   return (
+//     <React.Fragment>
+//       <DropdownMenu>
+//         <DropdownMenuTrigger asChild>
+//           <button className='h-7 min-w-7 shrink-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm'>
+//             <ImageIcon className='size-4' />
+//           </button>
+//         </DropdownMenuTrigger>
+//         <DropdownMenuContent>
+//           <DropdownMenuItem onClick={handleUpload}>
+//             <UploadIcon className='size-4 mr-2' />
+//             Upload
+//           </DropdownMenuItem>
+//           <DropdownMenuItem onClick={() => setIsOpen(true)}>
+//             <SearchIcon className='size-4 mr-2' />
+//             Paste image URL
+//           </DropdownMenuItem>
+//         </DropdownMenuContent>
+//       </DropdownMenu>
 
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Insert image URL</DialogTitle>
-          </DialogHeader>
-          <Input
-            placeholder='Insert image URL'
-            value={imageUrl}
-            onChange={(e) => setImageUrl(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                handleImageUrlSubmit()
-              }
-            }}
-          />
-          <DialogFooter>
-            <Button onClick={handleImageUrlSubmit}>Insert</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </React.Fragment>
-  )
-}
+//       <Dialog open={isOpen} onOpenChange={setIsOpen}>
+//         <DialogContent>
+//           <DialogHeader>
+//             <DialogTitle>Insert image URL</DialogTitle>
+//           </DialogHeader>
+//           <Input
+//             placeholder='Insert image URL'
+//             value={imageUrl}
+//             onChange={(e) => setImageUrl(e.target.value)}
+//             onKeyDown={(e) => {
+//               if (e.key === 'Enter') {
+//                 handleImageUrlSubmit()
+//               }
+//             }}
+//           />
+//           <DialogFooter>
+//             <Button onClick={handleImageUrlSubmit}>Insert</Button>
+//           </DialogFooter>
+//         </DialogContent>
+//       </Dialog>
+//     </React.Fragment>
+//   )
+// }
 
-const LinkButton = () => {
-  const { editor } = useEditorStore()
-  const [value, setValue] = useState<string>('')
+// const LinkButton = () => {
+//   const { editor } = useEditorStore()
+//   const [value, setValue] = useState<string>('')
 
-  const handleChange = (href: string) => {
-    editor?.chain().focus().extendMarkRange('link').setLink({ href }).run()
-    setValue('')
-  }
+//   const handleChange = (href: string) => {
+//     editor?.chain().focus().extendMarkRange('link').setLink({ href }).run()
+//     setValue('')
+//   }
 
-  return (
-    <DropdownMenu
-      onOpenChange={(open) => {
-        if (open) {
-          setValue(editor?.getAttributes('link').href || '')
-        }
-      }}
-    >
-      <DropdownMenuTrigger asChild>
-        <button className='h-7 min-w-7 shrink-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm'>
-          <Link2Icon className='size-4' />
-        </button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className='p-2.5 flex items-center gap-x-2'>
-        <Input
-          placeholder='https://example.com'
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-        />
-        <Button onClick={() => handleChange(value)}>Apply</Button>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  )
-}
+//   return (
+//     <DropdownMenu
+//       onOpenChange={(open) => {
+//         if (open) {
+//           setValue(editor?.getAttributes('link').href || '')
+//         }
+//       }}
+//     >
+//       <DropdownMenuTrigger asChild>
+//         <button className='h-7 min-w-7 shrink-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm'>
+//           <Link2Icon className='size-4' />
+//         </button>
+//       </DropdownMenuTrigger>
+//       <DropdownMenuContent className='p-2.5 flex items-center gap-x-2'>
+//         <Input
+//           placeholder='https://example.com'
+//           value={value}
+//           onChange={(e) => setValue(e.target.value)}
+//         />
+//         <Button onClick={() => handleChange(value)}>Apply</Button>
+//       </DropdownMenuContent>
+//     </DropdownMenu>
+//   )
+// }
 
-const HighlightColorButton = () => {
-  const { editor } = useEditorStore()
+// const HighlightColorButton = () => {
+//   const { editor } = useEditorStore()
 
-  const currentColor = editor?.getAttributes('highlight').color || '#ffffff'
+//   const currentColor = editor?.getAttributes('highlight').color || '#ffffff'
 
-  const handleColorChange = (color: ColorResult) => {
-    editor?.chain().focus().setHighlight({ color: color.hex }).run()
-  }
+//   const handleColorChange = (color: ColorResult) => {
+//     editor?.chain().focus().setHighlight({ color: color.hex }).run()
+//   }
 
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <button className='h-7 min-w-7 shrink-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm'>
-          <HighlighterIcon className='size-4' />
-        </button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className='p-0'>
-        <SketchPicker color={currentColor} onChange={handleColorChange} />
-      </DropdownMenuContent>
-    </DropdownMenu>
-  )
-}
+//   return (
+//     <DropdownMenu>
+//       <DropdownMenuTrigger asChild>
+//         <button className='h-7 min-w-7 shrink-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm'>
+//           <HighlighterIcon className='size-4' />
+//         </button>
+//       </DropdownMenuTrigger>
+//       <DropdownMenuContent className='p-0'>
+//         <SketchPicker color={currentColor} onChange={handleColorChange} />
+//       </DropdownMenuContent>
+//     </DropdownMenu>
+//   )
+// }
 
-const TextColorButton = () => {
-  const { editor } = useEditorStore()
+// const TextColorButton = () => {
+//   const { editor } = useEditorStore()
 
-  const currentColor = editor?.getAttributes('textStyle').color || '#000000'
+//   const currentColor = editor?.getAttributes('textStyle').color || '#000000'
 
-  const handleColorChange = (color: ColorResult) => {
-    editor?.chain().focus().setColor(color.hex).run()
-  }
+//   const handleColorChange = (color: ColorResult) => {
+//     editor?.chain().focus().setColor(color.hex).run()
+//   }
 
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <button className='h-7 min-w-7 shrink-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm'>
-          <span className='text-xs'>A</span>
-          <div className='h-0.5 w-full' style={{ backgroundColor: currentColor }} />
-        </button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className='p-0'>
-        <SketchPicker color={currentColor} onChange={handleColorChange} />
-      </DropdownMenuContent>
-    </DropdownMenu>
-  )
-}
+//   return (
+//     <DropdownMenu>
+//       <DropdownMenuTrigger asChild>
+//         <button className='h-7 min-w-7 shrink-0 flex flex-col items-center justify-center rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm'>
+//           <span className='text-xs'>A</span>
+//           <div className='h-0.5 w-full' style={{ backgroundColor: currentColor }} />
+//         </button>
+//       </DropdownMenuTrigger>
+//       <DropdownMenuContent className='p-0'>
+//         <SketchPicker color={currentColor} onChange={handleColorChange} />
+//       </DropdownMenuContent>
+//     </DropdownMenu>
+//   )
+// }
 
 const HeadingLevelButton = () => {
   const { editor } = useEditorStore()
@@ -729,7 +729,7 @@ const FontFamilyButton = () => {
       <DropdownMenuTrigger asChild>
         <button
           className={cn(
-            'h-7 w-[120px] shrink-0 flex items-center justify-between rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm'
+            'h-7 w-[150px] shrink-0 flex items-center justify-between rounded-sm hover:bg-neutral-200/80 px-1.5 overflow-hidden text-sm'
           )}
         >
           <span className='truncate'>
@@ -799,20 +799,20 @@ export const Toolbar: FC = () => {
         label: 'Redo',
         icon: Redo2Icon,
         onClick: () => editor?.chain().focus().redo().run()
-      },
-      {
-        label: 'Print',
-        icon: PrinterIcon,
-        onClick: () => window.print()
-      },
-      {
-        label: 'Spell Check',
-        icon: SpellCheckIcon,
-        onClick: () => {
-          const current = editor?.view.dom.getAttribute('spellcheck')
-          editor?.view.dom.setAttribute('spellcheck', current === 'true' ? 'false' : 'true')
-        }
       }
+      // {
+      //   label: 'Print',
+      //   icon: PrinterIcon,
+      //   onClick: () => window.print()
+      // }
+      // {
+      //   label: 'Spell Check',
+      //   icon: SpellCheckIcon,
+      //   onClick: () => {
+      //     const current = editor?.view.dom.getAttribute('spellcheck')
+      //     editor?.view.dom.setAttribute('spellcheck', current === 'true' ? 'false' : 'true')
+      //   }
+      // }
     ],
     [
       {
@@ -870,18 +870,18 @@ export const Toolbar: FC = () => {
       {sections[1].map((item) => (
         <ToolbarButton key={item.label} {...item} />
       ))}
-      <TextColorButton />
-      <HighlightColorButton />
+      {/* <TextColorButton /> */}
+      {/* <HighlightColorButton /> */}
       <Separator orientation='vertical' className='h-6 bg-neutral-300' />
-      <LinkButton />
-      <ImageButton />
+      {/* <LinkButton /> */}
+      {/* <ImageButton /> */}
       <AlignButton />
-      <LineHeightButton />
+      {/* <LineHeightButton /> */}
       <ListButton />
       <Separator orientation='vertical' className='h-6 bg-neutral-300' />
-      {sections[2].map((item) => (
+      {/* {sections[2].map((item) => (
         <ToolbarButton key={item.label} {...item} />
-      ))}
+      ))} */}
     </div>
   )
 }
