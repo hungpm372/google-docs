@@ -1,36 +1,114 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Prototype for Google Docs
 
-## Getting Started
+## Prerequisites
 
-First, run the development server:
+Before you begin, ensure you have the following installed:
+- [Docker](https://www.docker.com/)
+- [Docker Compose](https://docs.docker.com/compose/)
+- [Node.js](https://nodejs.org/) (for manual setup)
 
+## Obtaining Clerk and Convex Keys
+
+### Clerk Authentication Keys
+
+1. Go to [Clerk Dashboard](https://dashboard.clerk.com/)
+2. Create a new application or select an existing one
+3. Navigate to "API Keys" in the sidebar
+4. Copy:
+   - `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` (client)
+   - `CLERK_SECRET_KEY` (server)
+
+### Convex Deployment
+
+1. Go to [Convex Dashboard](https://dashboard.convex.dev/)
+2. Create a new project or select an existing one
+3. Install the Convex CLI:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install convex
+```
+4. Run convex:
+```bash
+npx convex dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Quick Start with Docker
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd google-docs
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. Create .env.local file
 
-## Learn More
+3. Start the services:
+```bash
+docker-compose up -d
+```
 
-To learn more about Next.js, take a look at the following resources:
+4. Access the application:
+- Frontend: http://localhost:3000
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Docker Commands
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+# Start all services
+docker-compose up -d
 
-## Deploy on Vercel
+# Stop all services
+docker-compose down
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# Rebuild services
+docker-compose up -d --build
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# Remove all containers and volumes
+docker-compose down -v
+```
+
+## Manual Setup (Without Docker)
+
+### UI Setup
+
+1. Navigate to the UI directory:
+```bash
+cd google-docs
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Create `.env.local`
+```bash
+CONVEX_DEPLOYMENT=
+NEXT_PUBLIC_CONVEX_URL=
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
+```
+
+4. Start the development server:
+```bash
+npm run dev
+```
+
+The UI will be available at http://localhost:3000
+
+## Development
+
+### Environment Variables
+```bash
+CONVEX_DEPLOYMENT=
+NEXT_PUBLIC_CONVEX_URL=
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
+```
+
+## Production Deployment
+
+1. Update environment variables as needed
+
+2. Build and start the services:
+```bash
+docker-compose -f docker-compose.yml up -d --build
+```

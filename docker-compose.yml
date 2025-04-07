@@ -1,0 +1,12 @@
+services:
+  google-docs:
+    container_name: google-docs
+    build: .
+    ports:
+      - '3000:3000'
+    volumes:
+      - /usr/src/app/node_modules
+      - /usr/src/app/.next
+    environment:
+      - NODE_ENV=development
+    restart: unless-stopped
