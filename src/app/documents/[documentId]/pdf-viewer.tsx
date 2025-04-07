@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { ChevronLeft, ChevronRight, Loader, Minus, Plus, Printer } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Download, Loader, Minus, Plus, Printer } from 'lucide-react'
 import { useState } from 'react'
 import { Document, Page, pdfjs } from 'react-pdf'
 import 'react-pdf/dist/esm/Page/AnnotationLayer.css'
@@ -17,6 +17,14 @@ const PdfViewer = ({ pdfUrl }: { pdfUrl: string }) => {
   const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
     setNumPages(numPages)
     setPageNumber(1)
+  }
+
+  const handleExportPdf = () => {
+    const link = document.createElement('a')
+    link.href = pdfUrl
+
+    link.download = 'document.pdf'
+    link.click()
   }
 
   return (
@@ -104,6 +112,16 @@ const PdfViewer = ({ pdfUrl }: { pdfUrl: string }) => {
           >
             <Printer />
             In
+          </Button>
+          <Button
+            variant='outline'
+            size='sm'
+            className='h-8 px-3 ml-2 rounded-md hover:bg-gray-50'
+            onClick={handleExportPdf}
+            disabled={!pdfUrl}
+          >
+            <Download className='mr-1' />
+            Xuất PDF
           </Button>
         </div>
       </div>
