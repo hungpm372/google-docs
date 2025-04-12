@@ -36,7 +36,7 @@ export const SignatureDraggable: FC<SignatureDraggableProps> = ({ id, src, x, y,
 
   const style = {
     transform: CSS.Translate.toString(transform),
-    position: 'absolute',
+    position: 'absolute' as const,
     left: `${position.x}px`,
     top: `${position.y}px`,
     zIndex: 1000,
@@ -49,7 +49,7 @@ export const SignatureDraggable: FC<SignatureDraggableProps> = ({ id, src, x, y,
       style={style}
       {...attributes}
       {...listeners}
-      className='signature-container relative'
+      className='signature-container relative border-2 border-dashed border-blue-500 cursor-move'
     >
       <Image
         src={src}
