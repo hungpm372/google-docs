@@ -26,7 +26,7 @@ const DocumentIdPage: FC = () => {
   })
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  const { editor } = useEditorStore()
+  const { editor, signatures } = useEditorStore()
   const [compiledPdf, setCompiledPdf] = useState<string | null>(null)
 
   const debouncedHandleChange = useDebounceCallback(
@@ -48,7 +48,10 @@ const DocumentIdPage: FC = () => {
       html2canvas(element, {
         scale: 2,
         logging: false,
-        useCORS: true
+        useCORS: true,
+        ignoreElements: (element) => {
+          return element.classList?.contains('signature-container')
+        }
       }).then((canvas) => {
         const imgData = canvas.toDataURL('image/jpeg', 0.85)
         const imgWidth = pageWidth
@@ -64,6 +67,10 @@ const DocumentIdPage: FC = () => {
             pdf.addPage()
           }
         }
+
+        signatures.forEach((sig) => {
+          pdf.addImage(sig.src, 'PNG', sig.x, sig.y, canvas.width * 0.2, canvas.height * 0.1)
+        })
 
         const pdfBlob = pdf.output('blob')
         const pdfUrl = URL.createObjectURL(pdfBlob)

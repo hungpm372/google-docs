@@ -782,7 +782,6 @@ const ToolbarButton: FC<ToolbarButtonProps> = ({ onClick, isActive, icon: Icon }
 
 export const Toolbar: FC = () => {
   const { editor } = useEditorStore()
-  console.log(editor)
 
   const sections: {
     label: string

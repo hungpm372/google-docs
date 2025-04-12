@@ -104,7 +104,7 @@ const signatureColors = [
 ]
 
 export const SignatureButton: FC = () => {
-  const { editor } = useEditorStore()
+  const { editor, addSignature } = useEditorStore()
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [signatureText, setSignatureText] = useState<string>('Alex Appleseed')
   const [selectedColor, setSelectedColor] = useState<string>('#000000')
@@ -172,7 +172,7 @@ export const SignatureButton: FC = () => {
         const ctx = canvas.getContext('2d')
 
         const selectedFontObj = signatureFonts.find((font) => font.id === selectedFont)
-        const fontSize = 48
+        const fontSize = 30
 
         if (ctx && selectedFontObj) {
           ctx.font = `${fontSize}px '${selectedFontObj.fontFamily}', cursive`
@@ -187,12 +187,19 @@ export const SignatureButton: FC = () => {
           ctx.fillText(signatureText, 10, canvas.height / 2)
 
           const dataUrl = canvas.toDataURL('image/png')
-          editor.chain().focus().setImage({ src: dataUrl }).run()
+          addSignature({
+            src: dataUrl,
+            x: 100,
+            y: 100
+          })
         }
       } else if (activeTab === 'draw' && canvasRef.current) {
         const dataUrl = canvasRef.current.toDataURL('image/png')
-        const content = `<img src="${dataUrl}" alt="Signature" />`
-        editor.chain().focus().insertContent(content).run()
+        addSignature({
+          src: dataUrl,
+          x: 100,
+          y: 100
+        })
       }
 
       setIsOpen(false)

@@ -13,6 +13,7 @@ import { Separator } from '@/components/ui/separator'
 import { FontSizeExtension } from '@/extensions/font-size'
 import { LineHeightExtension } from '@/extensions/line-height'
 import { useEditorStore } from '@/store/use-editor-store'
+import { DndContext } from '@dnd-kit/core'
 import { Color } from '@tiptap/extension-color'
 import FontFamily from '@tiptap/extension-font-family'
 import Highlight from '@tiptap/extension-highlight'
@@ -34,6 +35,7 @@ import { FC } from 'react'
 import { AiOutlineMergeCells, AiOutlineSplitCells } from 'react-icons/ai'
 import ImageResize from 'tiptap-extension-resize-image'
 import { Ruler } from './ruler'
+import { SignatureDraggable } from './signature-draggable'
 
 interface EditorProps {
   onChange: () => void
@@ -41,7 +43,7 @@ interface EditorProps {
 }
 
 export const Editor: FC<EditorProps> = ({ initialContent, onChange }) => {
-  const { setEditor } = useEditorStore()
+  const { signatures, setEditor, removeSignature, updateSignaturePosition } = useEditorStore()
   const editor = useEditor({
     onCreate(props) {
       setEditor(props.editor)
@@ -70,7 +72,6 @@ export const Editor: FC<EditorProps> = ({ initialContent, onChange }) => {
     // },
     editorProps: {
       attributes: {
-        id: 'tiptap',
         style: 'padding-left: 56px; padding-right: 56px;',
         class:
           'focus:outline-none print:border-0 bg-white border border-[#c7c7c7] flex flex-col min-h-[1054px] w-[816px] pt-10 pr-14 pb-10 cursor-text'
@@ -123,14 +124,39 @@ export const Editor: FC<EditorProps> = ({ initialContent, onChange }) => {
     ]
   })
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleDragEnd = (event: any) => {
+    const { active, delta } = event
+    if (active && delta && active.data.current?.currentPosition) {
+      const newX = active.data.current.currentPosition.x + delta.x
+      const newY = active.data.current.currentPosition.y + delta.y
+
+      updateSignaturePosition(active.id, newX, newY)
+    }
+  }
+
   return (
     <div className='w-full overflow-x-auto bg-[#f9fbfd] px-4 print:p-0 print:bg-white print:overflow-visible'>
       <Ruler />
       <ContextMenu>
         <ContextMenuTrigger>
-          <div className='min-w-max flex justify-center w-[816px] py-4 print:py-0 mx-auto print:w-full print:min-w-0'>
-            <EditorContent editor={editor} />
-          </div>
+          <DndContext onDragEnd={handleDragEnd}>
+            <div className='relative min-w-max flex justify-center w-[816px] py-4 print:py-0 mx-auto print:w-full print:min-w-0'>
+              <div className='relative' id='tiptap'>
+                <EditorContent editor={editor} />
+                {signatures.map((sig) => (
+                  <SignatureDraggable
+                    key={sig.id}
+                    id={sig.id}
+                    src={sig.src}
+                    x={sig.x}
+                    y={sig.y}
+                    onDelete={removeSignature}
+                  />
+                ))}
+              </div>
+            </div>
+          </DndContext>
         </ContextMenuTrigger>
         <ContextMenuContent className='w-[300px] py-2' onContextMenu={(e) => e.preventDefault()}>
           <ContextMenuSub>
