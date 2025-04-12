@@ -162,10 +162,12 @@ const PdfViewer = ({ pdfUrl }: { pdfUrl: string }) => {
             <Page
               pageNumber={pageNumber}
               scale={scale}
-              renderTextLayer={false}
-              renderAnnotationLayer={false}
+              renderTextLayer={true}
+              renderAnnotationLayer={true}
               className='shadow-md'
               loading={<div className='w-full h-full min-h-72 bg-gray-100 animate-pulse'></div>}
+              canvasBackground='transparent'
+              renderMode='canvas'
             />
           </Document>
         </div>

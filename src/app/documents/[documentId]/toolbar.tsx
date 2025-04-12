@@ -48,6 +48,7 @@ import {
   // UploadIcon
 } from 'lucide-react'
 import React, { FC, useState } from 'react'
+import { SignatureButton } from './signature-button'
 // import { type ColorResult, SketchPicker } from 'react-color'
 
 // const LineHeightButton = () => {
@@ -882,6 +883,7 @@ export const Toolbar: FC = () => {
       {/* {sections[2].map((item) => (
         <ToolbarButton key={item.label} {...item} />
       ))} */}
+      <SignatureButton />
     </div>
   )
 }

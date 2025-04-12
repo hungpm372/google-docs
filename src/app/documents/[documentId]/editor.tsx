@@ -101,7 +101,14 @@ export const Editor: FC<EditorProps> = ({ initialContent, onChange }) => {
       FontFamily,
       TextStyle,
       Underline,
-      Image,
+      Image.configure({
+        inline: true,
+        allowBase64: true,
+        HTMLAttributes: {
+          class: 'draggable-image',
+          draggable: 'true'
+        }
+      }),
       ImageResize,
       Table.configure({
         resizable: true
