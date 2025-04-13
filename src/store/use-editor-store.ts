@@ -6,6 +6,8 @@ interface Signature {
   src: string
   x: number
   y: number
+  width: number
+  height: number
 }
 
 interface EditorState {
@@ -15,6 +17,7 @@ interface EditorState {
   addSignature: (sig: Omit<Signature, 'id'>) => void
   removeSignature: (id: string) => void
   updateSignaturePosition: (id: string, x: number, y: number) => void
+  updateSignatureSize: (id: string, width: number, height: number) => void
 }
 
 export const useEditorStore = create<EditorState>((set) => ({
@@ -32,5 +35,9 @@ export const useEditorStore = create<EditorState>((set) => ({
   updateSignaturePosition: (id, x, y) =>
     set((state) => ({
       signatures: state.signatures.map((sig) => (sig.id === id ? { ...sig, x, y } : sig))
+    })),
+  updateSignatureSize: (id, width, height) =>
+    set((state) => ({
+      signatures: state.signatures.map((sig) => (sig.id === id ? { ...sig, width, height } : sig))
     }))
 }))

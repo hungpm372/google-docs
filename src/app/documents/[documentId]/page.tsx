@@ -69,7 +69,7 @@ const DocumentIdPage: FC = () => {
         }
 
         signatures.forEach((sig) => {
-          pdf.addImage(sig.src, 'PNG', sig.x, sig.y, canvas.width * 0.2, canvas.height * 0.1)
+          pdf.addImage(sig.src, 'PNG', sig.x, sig.y, sig.width, sig.height)
         })
 
         const pdfBlob = pdf.output('blob')

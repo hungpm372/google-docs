@@ -43,7 +43,8 @@ interface EditorProps {
 }
 
 export const Editor: FC<EditorProps> = ({ initialContent, onChange }) => {
-  const { signatures, setEditor, removeSignature, updateSignaturePosition } = useEditorStore()
+  const { signatures, setEditor, removeSignature, updateSignaturePosition, updateSignatureSize } =
+    useEditorStore()
   const editor = useEditor({
     onCreate(props) {
       setEditor(props.editor)
@@ -132,6 +133,7 @@ export const Editor: FC<EditorProps> = ({ initialContent, onChange }) => {
       const newY = active.data.current.currentPosition.y + delta.y
 
       updateSignaturePosition(active.id, newX, newY)
+      onChange()
     }
   }
 
@@ -152,6 +154,7 @@ export const Editor: FC<EditorProps> = ({ initialContent, onChange }) => {
                     x={sig.x}
                     y={sig.y}
                     onDelete={removeSignature}
+                    updateSignatureSize={updateSignatureSize}
                   />
                 ))}
               </div>

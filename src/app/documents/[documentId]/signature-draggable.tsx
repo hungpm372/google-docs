@@ -4,7 +4,7 @@ import { useDraggable } from '@dnd-kit/core'
 import { CSS } from '@dnd-kit/utilities'
 import { Trash2Icon } from 'lucide-react'
 import Image from 'next/image'
-import { FC, MouseEvent, PointerEvent, useEffect, useState } from 'react'
+import { FC, MouseEvent, PointerEvent, useEffect, useRef, useState } from 'react'
 
 interface SignatureDraggableProps {
   id: string
@@ -12,9 +12,18 @@ interface SignatureDraggableProps {
   x: number
   y: number
   onDelete: (id: string) => void
+  updateSignatureSize: (id: string, width: number, height: number) => void
 }
 
-export const SignatureDraggable: FC<SignatureDraggableProps> = ({ id, src, x, y, onDelete }) => {
+export const SignatureDraggable: FC<SignatureDraggableProps> = ({
+  id,
+  src,
+  x,
+  y,
+  onDelete,
+  updateSignatureSize
+}) => {
+  const imageRef = useRef<HTMLImageElement>(null)
   const [position, setPosition] = useState({ x, y })
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id,
@@ -33,6 +42,13 @@ export const SignatureDraggable: FC<SignatureDraggableProps> = ({ id, src, x, y,
   useEffect(() => {
     setPosition({ x, y })
   }, [x, y])
+
+  useEffect(() => {
+    if (imageRef.current) {
+      const { width, height } = imageRef.current.getBoundingClientRect()
+      updateSignatureSize(id, width, height)
+    }
+  }, [imageRef.current, id])
 
   const style = {
     transform: CSS.Translate.toString(transform),
@@ -58,6 +74,7 @@ export const SignatureDraggable: FC<SignatureDraggableProps> = ({ id, src, x, y,
         draggable='false'
         width={100}
         height={30}
+        ref={imageRef}
       />
       <button
         onClick={handleDelete}

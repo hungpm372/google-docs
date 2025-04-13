@@ -190,7 +190,9 @@ export const SignatureButton: FC = () => {
           addSignature({
             src: dataUrl,
             x: 100,
-            y: 100
+            y: 100,
+            width: canvas.width,
+            height: canvas.height
           })
         }
       } else if (activeTab === 'draw' && canvasRef.current) {
@@ -198,7 +200,9 @@ export const SignatureButton: FC = () => {
         addSignature({
           src: dataUrl,
           x: 100,
-          y: 100
+          y: 100,
+          width: canvasRef.current.width,
+          height: canvasRef.current.height
         })
       }
 
