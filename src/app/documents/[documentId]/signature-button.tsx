@@ -12,6 +12,7 @@ import { Input } from '@/components/ui/input'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { cn } from '@/lib/utils'
 import { useEditorStore } from '@/store/use-editor-store'
+import { useMutation } from 'convex/react'
 import { Camera, Keyboard, PenLine, Signature, Upload } from 'lucide-react'
 import {
   Caveat,
@@ -25,6 +26,9 @@ import {
   Stalemate
 } from 'next/font/google'
 import React, { FC, useRef, useState } from 'react'
+import { api } from '../../../../convex/_generated/api'
+import { useParams } from 'next/navigation'
+import { Id } from '../../../../convex/_generated/dataModel'
 
 const stalemate = Stalemate({ subsets: ['latin'], weight: '400' })
 const overTheRainbow = Over_the_Rainbow({ subsets: ['latin'], weight: '400' })
@@ -104,14 +108,17 @@ const signatureColors = [
 ]
 
 export const SignatureButton: FC = () => {
-  const { editor, addSignature } = useEditorStore()
+  const { editor, signatures, addSignature } = useEditorStore()
+  const params = useParams<{ documentId: string }>()
   const [isOpen, setIsOpen] = useState<boolean>(false)
-  const [signatureText, setSignatureText] = useState<string>('Alex Appleseed')
-  const [selectedColor, setSelectedColor] = useState<string>('#000000')
   const [selectedFont, setSelectedFont] = useState<string>('font-1')
+  const [selectedColor, setSelectedColor] = useState<string>('#000000')
+  const [signatureText, setSignatureText] = useState<string>('Alex Appleseed')
   const canvasRef = useRef<HTMLCanvasElement>(null)
   //   const [isDrawing, setIsDrawing] = useState<boolean>(false)
   const [activeTab, setActiveTab] = useState<string>('type')
+
+  const update = useMutation(api.documents.updateById)
 
   // Handle drawing signature
   //   const startDrawing = (e: React.MouseEvent<HTMLCanvasElement>) => {
@@ -187,22 +194,36 @@ export const SignatureButton: FC = () => {
           ctx.fillText(signatureText, 10, canvas.height / 2)
 
           const dataUrl = canvas.toDataURL('image/png')
-          addSignature({
+          const newSignature = {
+            id: `sig-${Date.now()}`,
             src: dataUrl,
             x: 0,
             y: 0,
             width: canvas.width,
             height: canvas.height
+          }
+
+          addSignature(newSignature)
+
+          update({
+            id: params.documentId as Id<'documents'>,
+            signatures: [...signatures, newSignature]
           })
         }
       } else if (activeTab === 'draw' && canvasRef.current) {
         const dataUrl = canvasRef.current.toDataURL('image/png')
-        addSignature({
+        const newSignature = {
+          id: `sig-${Date.now()}`,
           src: dataUrl,
           x: 0,
           y: 0,
           width: canvasRef.current.width,
           height: canvasRef.current.height
+        }
+        addSignature(newSignature)
+        update({
+          id: params.documentId as Id<'documents'>,
+          signatures: [...signatures, newSignature]
         })
       }
 

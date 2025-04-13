@@ -16,7 +16,8 @@ interface EditorState {
   editor: Editor | null
   signatures: Signature[]
   setEditor: (editor: Editor | null) => void
-  addSignature: (sig: Omit<Signature, 'id'>) => void
+  setSignatures: (signatures: Signature[]) => void
+  addSignature: (sig: Signature) => void
   removeSignature: (id: string) => void
   updateSignaturePosition: (id: string, x: number, y: number) => void
   updateSignatureSize: (id: string, width: number, height: number) => void
@@ -26,6 +27,7 @@ export const useEditorStore = create<EditorState>((set) => ({
   editor: null,
   signatures: [],
   setEditor: (editor) => set({ editor }),
+  setSignatures: (signatures) => set({ signatures }),
   addSignature: (sig) =>
     set((state) => {
       const editorElement = document.getElementById('tiptap')
@@ -40,7 +42,6 @@ export const useEditorStore = create<EditorState>((set) => ({
           ...state.signatures,
           {
             ...sig,
-            id: `sig-${Date.now()}`,
             xPercent,
             yPercent
           }

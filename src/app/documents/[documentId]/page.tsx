@@ -26,21 +26,23 @@ const DocumentIdPage: FC = () => {
   })
   const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  const { editor, signatures } = useEditorStore()
+  const { editor, signatures, setSignatures } = useEditorStore()
   const [compiledPdf, setCompiledPdf] = useState<string | null>(null)
 
   const debouncedHandleChange = useDebounceCallback(
     () => {
+      const element = document.getElementById('tiptap')
+      if (!element || !documentResult) return
+
       setIsLoading(true)
       update({
         id: params.documentId as Id<'documents'>,
-        initialContent: editor?.getHTML()
+        initialContent: editor?.getHTML(),
+        signatures: [...signatures]
       }).finally(() => {
         setIsLoading(false)
       })
 
-      const element = document.getElementById('tiptap')
-      if (!element) return
       const pdf = new jsPDF('p', 'pt', 'a4')
       const pageWidth = pdf.internal.pageSize.getWidth()
       const pageHeight = pdf.internal.pageSize.getHeight()
@@ -104,11 +106,19 @@ const DocumentIdPage: FC = () => {
   }, [compiledPdf])
 
   useEffect(() => {
+    if (!documentResult) return
+
     debouncedHandleChange()
     return () => {
       debouncedHandleChange.cancel()
     }
-  }, [documentResult])
+  }, [documentResult, signatures])
+
+  useEffect(() => {
+    setSignatures(
+      documentResult ? (documentResult.signatures ? documentResult.signatures : []) : []
+    )
+  }, [documentResult, params.documentId])
 
   return (
     <div className='flex flex-col h-screen'>

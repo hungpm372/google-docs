@@ -16,7 +16,8 @@ export const create = mutation({
     return await ctx.db.insert('documents', {
       title: args.title ?? 'Untitled Document',
       ownerId: user.subject,
-      initialContent: args.initialContent
+      initialContent: args.initialContent,
+      signatures: []
     })
   }
 })
@@ -71,7 +72,21 @@ export const updateById = mutation({
   args: {
     id: v.id('documents'),
     title: v.optional(v.string()),
-    initialContent: v.optional(v.string())
+    initialContent: v.optional(v.string()),
+    signatures: v.optional(
+      v.array(
+        v.object({
+          id: v.string(),
+          src: v.string(),
+          x: v.number(),
+          y: v.number(),
+          width: v.number(),
+          height: v.number(),
+          xPercent: v.optional(v.number()),
+          yPercent: v.optional(v.number())
+        })
+      )
+    )
   },
   handler: async (ctx, args) => {
     const user = await ctx.auth.getUserIdentity()
@@ -91,7 +106,8 @@ export const updateById = mutation({
 
     return await ctx.db.patch(args.id, {
       initialContent: args.initialContent ?? document.initialContent,
-      title: args.title ?? document.title
+      title: args.title ?? document.title,
+      signatures: args.signatures ?? document.signatures
     })
   }
 })
