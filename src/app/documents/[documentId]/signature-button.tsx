@@ -189,8 +189,8 @@ export const SignatureButton: FC = () => {
           const dataUrl = canvas.toDataURL('image/png')
           addSignature({
             src: dataUrl,
-            x: 100,
-            y: 100,
+            x: 0,
+            y: 0,
             width: canvas.width,
             height: canvas.height
           })
@@ -199,8 +199,8 @@ export const SignatureButton: FC = () => {
         const dataUrl = canvasRef.current.toDataURL('image/png')
         addSignature({
           src: dataUrl,
-          x: 100,
-          y: 100,
+          x: 0,
+          y: 0,
           width: canvasRef.current.width,
           height: canvasRef.current.height
         })

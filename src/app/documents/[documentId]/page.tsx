@@ -69,7 +69,21 @@ const DocumentIdPage: FC = () => {
         }
 
         signatures.forEach((sig) => {
-          pdf.addImage(sig.src, 'PNG', sig.x, sig.y, sig.width, sig.height)
+          let posX = sig.x
+          let posY = sig.y
+
+          if (sig.xPercent !== undefined && sig.yPercent !== undefined) {
+            posX = (sig.xPercent / 100) * pageWidth
+            posY = (sig.yPercent / 100) * pageHeight
+          }
+
+          const editorWidth = 816
+          const scaleRatio = pageWidth / editorWidth
+
+          const adjustedWidth = sig.width * scaleRatio
+          const adjustedHeight = sig.height * scaleRatio
+
+          pdf.addImage(sig.src, 'PNG', posX, posY, adjustedWidth, adjustedHeight)
         })
 
         const pdfBlob = pdf.output('blob')
